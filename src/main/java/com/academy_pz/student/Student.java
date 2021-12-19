@@ -1,7 +1,11 @@
 package com.academy_pz.student;
 
+import com.academy_pz.model.Direction;
+import com.academy_pz.teacher.Teacher;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.List;
 
 @Entity
 public class Student {
@@ -26,9 +30,15 @@ public class Student {
     @NotEmpty(message = "User's email cannot be empty.")
     private String email;
 
-    @NotEmpty(message = "Direction cannot be empty.")
-    @Size(max = 2048, message = "Direction too long (more than 2kB)")
-    private String direction;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "teacher_student", joinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
+    private List<Teacher> teacherList;
+
+//        @NotEmpty(message = "Direction cannot be empty.")
+//    @Size(max = 2048, message = "Direction too long (more than 2kB)")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "direction_id")
+    private Direction directions;
 
     public Student() {
     }
@@ -36,13 +46,11 @@ public class Student {
     public Student(String firstName,
                    String lastName,
                    Integer age,
-                   String email,
-                   String direction) {
+                   String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
         this.email = email;
-        this.direction = direction;
     }
 
     public Long getId() {
@@ -85,11 +93,19 @@ public class Student {
         this.email = email;
     }
 
-    public String getDirection() {
-        return direction;
+    public List<Teacher> getTeacherList() {
+        return teacherList;
     }
 
-    public void setDirection(String direction) {
-        this.direction = direction;
+    public void setTeacherList(List<Teacher> teacherList) {
+        this.teacherList = teacherList;
+    }
+
+    public Direction getDirections() {
+        return directions;
+    }
+
+    public void setDirections(Direction directions) {
+        this.directions = directions;
     }
 }
