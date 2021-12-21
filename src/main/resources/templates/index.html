@@ -1,0 +1,142 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@1.16.5/dist/full.css" rel="stylesheet" type="text/css"/>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css"/>
+  <link href="/static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
+  <title>Academy PZ</title>
+</head>
+<body>
+<div class="ml-3 mt-5">
+  <h2 class="text-4xl mb-3 border-l-8 pl-4 border-primary">Create Person</h2>
+
+  <a href="/student/add" class="btn btn-xs md:btn-sm lg:btn-md xl:btn-lg mt-4 ml-5 mr-3">Add a new students</a>
+  <a class="btn btn-xs md:btn-sm lg:btn-md xl:btn-lg mt-4" href="/teacher/add">Add a new teachers</a>
+</div>
+<div class="container">
+  <div class="overflow-x-auto" th:switch="${students}">
+    <h2 th:case="null" class="text-primary mt-4">No students yet!</h2>
+    <div th:case="*">
+      <h2 class="text-primary font-bold mt-4 mb-2">Student List</h2>
+
+      <table class="table w-full table-compact">
+        <thead>
+        <tr>
+          <th>
+            <a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}">№</a>
+          </th>
+          <th>
+            <a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">
+              First Name
+            </a>
+          </th>
+          <th>
+            <a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">
+              Last Name
+            </a>
+          </th>
+          <th>Age</th>
+          <th>E-mail</th>
+          <th>Direction</th>
+          <th>Teacher</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${students}">
+          <th th:text="${student.id}"></th>
+          <td th:text="${student.firstName}"></td>
+          <td th:text="${student.lastName}"></td>
+          <td th:text="${student.age}"></td>
+          <td th:text="${student.email}"></td>
+          <td th:text="${student.directions.name}"></td>
+
+
+          <td><a class="btn btn-success btn-xs" th:href="@{/student/edit/{id}(id=${student.id})}">Edit</a></td>
+          <td><a class="btn btn-error btn-xs" th:href="@{/student/delete/{id}(id=${student.id})}">Delete</a></td>
+        </tr>
+      </table>
+      <div th:if="${totalPages > 1}">
+        <span class="text-primary font-light mt-4 mb-2">Total Rows: [[${totalItems}]]</span>
+        <div class="btn-group">
+          <a class="btn btn-sm" th:if="${currentPage < totalPages}"
+             th:href="@{'/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+            Last
+          </a>
+          <a class="btn btn-sm" th:unless="${currentPage < totalPages}">Last</a>
+
+          <div class="btn btn-sm" th:each="i: ${#numbers.sequence(firstPage, totalPages)}">
+            <a th:if="${currentPage != i}"
+               th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+            <a th:unless="${currentPage != i}">[[${i}]]</a>
+          </div>
+
+          <!--      <button class="btn btn-sm btn-active"></button>-->
+
+          <a class="btn btn-sm" th:if="${currentPage > firstPage}"
+             th:href="@{'/page/' + ${currentPage -1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+            Previous
+          </a>
+          <a class="btn btn-sm" th:unless="${currentPage > firstPage}">Previous</a>
+
+          <a class="btn btn-sm" th:if="${currentPage < totalPages}"
+             th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
+            Next
+          </a>
+          <a class="btn btn-sm" th:unless="${currentPage < totalPages}">Next</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--=======================================-->
+  <div class="overflow-x-auto" th:switch="${teachers}">
+    <h2 th:case="null" class="text-primary mt-4">No teachers yet!</h2>
+    <div th:case="*">
+      <h2 class="text-primary font-bold mt-4 mb-2">Teacher List</h2>
+      <table class="table w-full table-compact">
+        <thead>
+        <tr>
+          <th></th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Age</th>
+          <th>E-mail</th>
+          <th>Subject</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="teacher : ${teachers}">
+          <th th:text="${teacher.id}"></th>
+          <td th:text="${teacher.firstName}"></td>
+          <td th:text="${teacher.lastName}"></td>
+          <td th:text="${teacher.age}"></td>
+          <td th:text="${teacher.email}"></td>
+          <td th:text="${teacher.subject.name}"></td>
+          <td th:text="${teacher.students}"></td>
+
+
+          <td><a class="btn btn-success btn-xs" th:href="@{/teacher/edit/{id}(id=${teacher.id})}">Edit</a></td>
+          <td><a class="btn btn-error btn-xs" th:href="@{/teacher/delete/{id}(id=${teacher.id})}">Delete</a></td>
+        </tr>
+      </table>
+      <div class="btn-group m-auto">
+        <button class="btn btn-sm">Previous</button>
+        <button class="btn btn-sm">1</button>
+        <button class="btn btn-sm btn-active">2</button>
+        <button class="btn btn-sm">3</button>
+        <button class="btn btn-sm">4</button>
+        <button class="btn btn-sm">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

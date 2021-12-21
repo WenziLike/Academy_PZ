@@ -1,0 +1,76 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@1.16.5/dist/full.css" rel="stylesheet" type="text/css"/>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css"/>
+  <link href="/static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
+  <title>Update Teacher</title>
+</head>
+<body>
+<div class="ml-3 mt-5">
+  <h2 class="text-4xl mb-3 border-l-8 pl-4 border-primary">Update Teacher</h2>
+  <div class="container">
+    <form action="#" th:action="@{/teacher/edit/{id}(id=${id})}"
+          th:object="${teacher}" method="post" class="text-center">
+
+      <div th:if="${#fields.hasAnyErrors()}">
+        <div class="alert alert-sm alert-error mt-1" th:each="err : ${#fields.allErrors()}">
+          <div class="flex-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-6 h-6 mx-2 stroke-current">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
+            </svg>
+            <label th:text="${err}"></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 grid-flow-row-dense gap-4">
+        <div class="form-control">
+          <label class="label" for="firstName">
+            <span class="label-text">First Name</span>
+          </label>
+          <input type="text" th:field="*{firstName}" id="firstName" placeholder="first name"
+                 class="input input-bordered">
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="lastName">
+            <span class="label-text">Last Name</span>
+          </label>
+          <input type="text" th:field="*{lastName}" id="lastName" placeholder="last name" class="input input-bordered">
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="age">
+            <span class="label-text">Age</span>
+          </label>
+          <input type="text" th:field="*{age}" id="age" placeholder="age" class="input input-bordered">
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="email">
+            <span class="label-text">Email</span>
+          </label>
+          <input type="text" th:field="*{email}" id="email" placeholder="email" class="input input-bordered">
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="subject">
+            <span class="label-text">Subject</span>
+          </label>
+          <input type="text" th:field="*{subject}" id="subject" placeholder="subject" class="input input-bordered">
+        </div>
+      </div>
+
+      <input type="submit" class="btn btn-outline mt-6 btn-primary" value="Update Teacher">
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
