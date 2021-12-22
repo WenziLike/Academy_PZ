@@ -3,7 +3,8 @@ package com.academy_pz.model;
 import com.academy_pz.student.Student;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Direction {
@@ -15,7 +16,11 @@ public class Direction {
     private String name;
 
     @OneToMany(mappedBy = "directions", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Student> studentList;
+    private Set<Student> students = new HashSet<>();
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
 
     public Direction() {
     }
@@ -40,12 +45,20 @@ public class Direction {
         this.name = name;
     }
 
-    public List<Student> getStudentList() {
-        return studentList;
+    public Set<Student> getStudents() {
+        return students;
     }
 
-    public void setStudentList(List<Student> studentList) {
-        this.studentList = studentList;
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
     @Override
